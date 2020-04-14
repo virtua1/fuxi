@@ -7,9 +7,9 @@
 
 from flask_restful import Api
 from fuxi.web.flask_app import flask_app
-
-from migration.db_init import databases_init
 from fuxi.web.views.blue_view import blue_view
+
+from fuxi.web.init import databases_init, third_party_app_init
 
 from fuxi.web.api.demo.demo_api import HelloIndex, FileUploadDemo, JsonpDemoV1
 from fuxi.web.api.config.settings import AccountManageV1, BasicConfigMangeV1
@@ -18,6 +18,8 @@ from fuxi.web.api.auth.user_api import WhoAreYouV1
 from fuxi.web.api.scanner.poc_scanner import PocsuiteTasksV1, \
     PocsuitePluginsV1, PocsuiteTaskManageV1, PocsuitePluginManageV1, \
     PocsuiteResultsV1, PocsuiteResultManageV1, PocsuiteResultExportV1
+from fuxi.web.api.scanner.sqlmap_api import SqlmapTasksV1, SqlmapTaskManageV1, SqlmapResultsV1, \
+    SqlmapResultManageV1, SqlmapTaskResultExportV1
 from fuxi.web.api.exploit.jsonp_api import JsonpTasksV1, JsonpTaskManageV1, JsonDataReceiveV1, \
     JsonpTaskResListV1, JsonpResManageV1, JsonpResListV1
 from fuxi.web.api.exploit.http_request_api import HttpRequestLogV1, HttpRequestLogManageV1
@@ -29,12 +31,16 @@ from fuxi.web.api.discovery.subdomain_api import SubdomainTasksV1, SubdomainTask
     SubdomainResultManageV1, SubdomainResultExportV1
 from fuxi.web.api.discovery.whatweb_api import WhatwebTasksV1, WebsiteFPSearchV1, WhatwebTaskManageV1, \
     WhatwebScanTestV1, WebsiteFPManageV1, WebFPExportV1, WebFPExportWithTIDV1
-from fuxi.web.api.dashboard.dashboard_api import DashboardResCount
+from fuxi.web.api.dashboard.dashboard_api import DashboardResCount, DashboardRunningTasksV1, DashboardSystemInfoV1,\
+    DashboardCeleryTaskStopV1
 
 flask_app.register_blueprint(blue_view)
 api = Api(flask_app)
 api.add_resource(HelloIndex, "/api/v1/hello", "/api/v1/demo")
 api.add_resource(DashboardResCount, "/api/v1/dashboard/count")
+api.add_resource(DashboardRunningTasksV1, "/api/v1/dashboard/running")
+api.add_resource(DashboardSystemInfoV1, "/api/v1/dashboard/system")
+api.add_resource(DashboardCeleryTaskStopV1, "/api/v1/dashboard/task/stop/<cid>")
 api.add_resource(FileUploadDemo, "/api/v1/demo/upload")
 api.add_resource(JsonpDemoV1, "/api/v1/demo/jsonp")
 api.add_resource(WhoAreYouV1, "/api/v1/who")
@@ -50,6 +56,11 @@ api.add_resource(PocsuitePluginManageV1, "/api/v1/scanner/poc/plugin/<plugin_id>
 api.add_resource(PocsuiteResultsV1, "/api/v1/scanner/poc/vul")
 api.add_resource(PocsuiteResultManageV1, "/api/v1/scanner/poc/vul/<vul_id>")
 api.add_resource(PocsuiteResultExportV1, "/api/v1/scanner/poc/export")
+api.add_resource(SqlmapTasksV1, "/api/v1/scanner/sqlmap/task")
+api.add_resource(SqlmapTaskManageV1, "/api/v1/scanner/sqlmap/task/<tid>")
+api.add_resource(SqlmapResultsV1, "/api/v1/scanner/sqlmap/result")
+api.add_resource(SqlmapResultManageV1, "/api/v1/scanner/sqlmap/result/<rid>")
+api.add_resource(SqlmapTaskResultExportV1, "/api/v1/scanner/sqlmap/export/<tid>")
 api.add_resource(JsonpTasksV1, "/api/v1/exploit/jsonp/task")
 api.add_resource(JsonpTaskManageV1, "/api/v1/exploit/jsonp/task/<tid>")
 api.add_resource(JsonpTaskResListV1, "/api/v1/exploit/jsonp/task/list/<tid>")
@@ -85,3 +96,4 @@ api.add_resource(SubdomainResultExportV1, "/api/v1/discovery/subdomain/export/<t
 
 # Databases init
 databases_init()
+third_party_app_init()

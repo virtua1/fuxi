@@ -157,7 +157,8 @@ class PocsuiteTaskManageV1(Resource):
                     "end_date": 0
                 })
                 # celery task
-                t_poc_scanner.delay(tid)
+                celery_id = t_poc_scanner.delay(tid)
+                DBPocsuiteTask.update_celery_id(tid, str(celery_id))
                 logger.info("{} {} rescan poc scan task".format(session.get('user'), tid))
             return Response.success(message="successfully {}".format(action))
         except Exception as e:
@@ -308,7 +309,6 @@ class PocsuiteResultManageV1(Resource):
     @auth
     def get(self, vul_id):
         """
-        获取 poc 插件详情
         GET /api/v1/scanner/poc/vul/<vul_id>
         :return: all plugin [list]
         """

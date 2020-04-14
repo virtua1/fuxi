@@ -13,11 +13,14 @@ mongo = PyMongo(flask_app).db
 T_TESTS = "fuxi_tests"
 
 T_CONFIG = "fuxi_configuration"
+T_SYSTEM_INFO = "fuxi_system_info"
 
 T_ADMIN = "fuxi_admin_v1"
 T_POC_TASKS = "poc_tasks"
 T_POC_PLUGINS = "poc_plugins"
 T_POC_VULS = "poc_vuls"
+T_SQLMAP_TASKS = "sqlmap_tasks"
+T_SQLMAP_RESULT = "sqlmap_result"
 
 T_HTTP_REQUEST_LOG = "http_req"
 T_JSON_HIJACKER_TASK = 'json_hijacker_task'
